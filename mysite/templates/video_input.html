@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <html>
+        <head>
+           <script>
+                function call_counter(url) {
+                    window.open(url);
+                }
+            </script>
+        </head>
+        <body>
+            <div style="text-align : center;">
+                
+                [추천 운동 코스]<br><br>
+                <button onclick="call_counter('http://127.0.0.1:8000/video_input/video_stream/legs');">
+                다리 조지기 - 어쩌구 저쩌구 어쩌구 순서 10분 소요
+                </button><br><br>
+                <button onclick="call_counter('http://127.0.0.1:8000/video_input/video_stream');">
+                팔 조지기 - 어쩌구 저쩌구 어쩌구 순서 10분 소요
+                </button><br><br>
+                <button onclick="call_counter('http://127.0.0.1:8000/video_input/video_stream');">
+                복근 조지기 - 어쩌구 저쩌구 어쩌구 순서 10분 소요
+                </button>
+            </div>
+        </body>
+    </html>
+{% endblock %}
