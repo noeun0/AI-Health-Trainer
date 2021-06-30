@@ -412,6 +412,7 @@ def hand_video(flag, frame, detector):
     image = cv2.flip(frame, 1)
     image = detector.findPose(image, draw=False)
     return image
+
 def hand_video1(flag, frame):
     # For static images:
     hands = mp_hands.Hands(

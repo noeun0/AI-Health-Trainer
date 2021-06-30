@@ -2,9 +2,11 @@ import cv2
 from script.hand_video_detector import hand_video
 import time
 # import script.ExerciseCondition as EC
+
 import numpy as np
 import mediapipe as mp
 import math
+
 class poseDetector():
     
     def __init__(self, mode=False, upBody=False, smooth=True, detectionCon=0.5, trackCon=0.5):
@@ -247,7 +249,7 @@ class ExerciseType(poseDetector):
             Angle_leg_right = self.findAngle(img, p4, p5, p6, draw=False)
             Angle_left_side = self.findAngle(img, p7, p8, p9, draw=False)
             Angle_hip_left = 360 - self.findAngle(img, p10, p11, p12, draw)
-            Angle_hip_right = 360 - self.findAngle(img, p13, p14, p15, draw)
+            Angle_hip_right = 360- self.findAngle(img, p13, p14, p15, draw)
             Angle_Knee_left = self.findAngle(img, p16, p17, p18, draw)
             Angle_Knee_right = self.findAngle(img, p19, p20, p21, draw)
             
@@ -263,7 +265,7 @@ class ExerciseType(poseDetector):
 
             bar = np.interp(Angle_Knee_left, (ref_low_knee + 10, ref_low_knee), (100, self.height-100))
 
-            if (int(Angle_left_side) < 120) & (int(Angle_left_side) > 170):
+            if (int(Angle_left_side) < 220) & (int(Angle_left_side) > 170):
 
                 if (per_h_L <= 40) & (per_h_R <= 40) & (per_kn_L <= 40) & (per_kn_R <= 40):
                     self.Down = True
@@ -386,9 +388,9 @@ class VideoCamera(object):
          lmList = detector.findPosition(img, draw=False)
          if len(lmList) != 0:
             current = time.time()-start
-           # print(current)
+            print(current)
             count, per ,bar = detector.SelectExerciseMode(img, Exercise_type[Exercise[idx]])
-            if (int(current) == 5) | (count == 10):
+            if (int(current) == 10) | (count == 10):
                idx += 1
                start = time.time()
 
@@ -403,7 +405,7 @@ class VideoCamera(object):
          
       return img
 
-idx=0
+
 # generator that saves the video captured if flag is set
 def gen(camera, flag, mode):
    if flag == True:
@@ -438,14 +440,15 @@ def gen(camera, flag, mode):
       
       detector = ExerciseType(width, height, fps)
       start = time.time()
-      global idx
       while True:
-         
+         idx = 0
+
          ret, jpeg = cv2.imencode('.jpg', camera.get_frame(detector, start, idx, Exercise_type, Exercise))
          frame =  jpeg.tobytes()
-           
+         
          yield (b'--frame\r\n'
             b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
          
          if cv2.waitKey(1) == 27:
             break
+      
