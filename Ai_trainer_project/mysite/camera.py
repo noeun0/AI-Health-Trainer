@@ -2,7 +2,6 @@ import cv2
 from script.hand_video_detector import hand_video
 import time
 # import script.ExerciseCondition as EC
-
 import numpy as np
 import mediapipe as mp
 import math
