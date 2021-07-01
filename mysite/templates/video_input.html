@@ -8,13 +8,21 @@
                     window.open(url);
                 }
             </script>
+            <style>
+                .s1 { text-shadow: 2px 2px 2px gray; 
+                      font-family: "Arial Black", sans-serif;
+                      font-size: 30px;
+                      font-weight: bold;
+                      color: #0c0b0b; }
+              </style>
         </head>
         <body>
+            
             <div style="text-align : center;">
                 
-                [추천 운동 코스]<br><br>
+                <p class = "s1">레벨별 코스 선택</p>
                 
-                <div class="row">
+                <div class="row" >
                 <div class="card" style="width: 18rem;">
                     <center>
                     <img src="{% static '111.png' %}"  class="card-img-top" alt="...">
@@ -27,12 +35,7 @@
                         </button><br><br>
                     </div>
                      </center>
-                </div>
-            
-                
-
-
-                
+                    </div>
                     <div class="card" style="width: 18rem;">
                         <center>
                         <img src="{% static '222.png' %}" class="card-img-top" alt="...">
@@ -48,9 +51,6 @@
                     </div>
                 
 
-
-                
-                
                         <div class="card" style="width: 18rem;">
                             <center>
                             <img src="{% static '333.png' %}" class="card-img-top" alt="...">
@@ -64,8 +64,8 @@
                             </div>
                              </center>
                         </div>
-                    
-            </div>
+                    </center>
+                </div>
             </div>
         </body>
     </html>
