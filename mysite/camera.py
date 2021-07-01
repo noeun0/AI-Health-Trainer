@@ -378,11 +378,11 @@ def gen( flag, mode):
       video = cv2.VideoCapture(0)
 
       Exercise_type = {1: 'pushup', 2: 'barbellCurl', 3: 'squat', 4: 'lunge', 5: 'bridge'}
-      Routine_type = {'legs': [3, 1, 4], 'Arms': [1, 3, 2] , 'bridge_test':[5]}
+      Routine_type = {'Beginner': [3, 1], 'Intermediate': [3,1,4] , 'Premium':[3,1,4,5]}
       Routine = mode
-
+      goal_list = {'Beginner': [10, 10], 'Intermediate': [20,15,10] , 'Premium':[25,15,10,10]}
       Exercise = Routine_type[Routine]
-
+      goal = goal_list[Routine]
       fps = round(video.get(cv2.CAP_PROP_FPS))
       width = int(video.get(cv2.CAP_PROP_FRAME_WIDTH))
       height = int(video.get(cv2.CAP_PROP_FRAME_HEIGHT))
@@ -392,7 +392,7 @@ def gen( flag, mode):
       start = time.time()
       idx = 0
       
-      while idx < 3:
+      while idx < len(Exercise):
       #width = int(self.video.get(cv2.CAP_PROP_FRAME_WIDTH))
       #height = int(self.video.get(cv2.CAP_PROP_FRAME_HEIGHT))
       
@@ -403,7 +403,7 @@ def gen( flag, mode):
             lmList = detector.findPosition(img, draw=False)
             if len(lmList) != 0:
                 count, per ,bar = detector.SelectExerciseMode(img, Exercise_type[Exercise[idx]])
-                if (int(current) == 50) | (count == 10):
+                if (int(current) == 50) | (count == goal[idx]):
                    idx += 1
                    start = time.time()
                 cv2.rectangle(img, (0, height - 200), (150, height),
