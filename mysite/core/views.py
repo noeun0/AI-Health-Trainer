@@ -10,7 +10,7 @@ import numpy as np
 from script.hand_image_detector import hand_detection
 import cv2
 
-from mysite.camera import VideoCamera, gen
+from mysite.camera import  gen
 from django.http import StreamingHttpResponse
 
 
@@ -58,12 +58,12 @@ def _grab_image(path=None, stream=None, url=None):
 
 # for video input and detection
 def video_stream(request,mode):
-    vid = StreamingHttpResponse(gen(VideoCamera(), False,mode), 
+    vid = StreamingHttpResponse(gen(False,mode), 
     content_type='multipart/x-mixed-replace; boundary=frame')
     return vid
 
 def video_save(request):
-    vid = StreamingHttpResponse(gen(VideoCamera(), True), 
+    vid = StreamingHttpResponse(gen(True), 
     content_type='multipart/x-mixed-replace; boundary=frame')
     return vid
 

@@ -371,61 +371,11 @@ class ExerciseType(poseDetector):
 
 # basically take camera input and convert it into a cv object
 # later to be processed by gen()
-class VideoCamera(object):
-   def __init__(self):
-      self.video = cv2.VideoCapture(0)
-      
-   def __del__(self):
-      self.video.release()
-
-   def get_frame(self,detector,start, idx, Exercise_type, Exercise):
-      width = int(self.video.get(cv2.CAP_PROP_FRAME_WIDTH))
-      height = int(self.video.get(cv2.CAP_PROP_FRAME_HEIGHT))
-      success, img = self.video.read()
-
-      if success:
-         img = hand_video(success, img, detector)
-         lmList = detector.findPosition(img, draw=False)
-         if len(lmList) != 0:
-            current = time.time()-start
-            print(current)
-            count, per ,bar = detector.SelectExerciseMode(img, Exercise_type[Exercise[idx]])
-            if (int(current) == 10) | (count == 10):
-               idx += 1
-               start = time.time()
-
-         cv2.rectangle(img, (0, height - 200), (150, height),
-                  (0, 255, 0), cv2.FILLED)
-         cv2.putText(img, '{:.1f}'.format(current), (15, height-75), cv2.FONT_HERSHEY_PLAIN, 5,
-                  (255, 0, 0), 5)
-         cv2.putText(img, Exercise_type[Exercise[idx]], (15+150, height-50), cv2.FONT_HERSHEY_PLAIN, 5,
-                  (0, 0, 255), 5)
-         detector.Draw(img, per, bar)
-
-         
-      return img
 
 
 # generator that saves the video captured if flag is set
-def gen(camera, flag, mode):
-   if flag == True:
-      
-      time_now = time.localtime()
-      current_time = time.strftime("%H:%M:%S", time_now)
-      fourcc = cv2.VideoWriter_fourcc(*'XVID')
-      out = cv2.VideoWriter('output_' + str(current_time) + '.avi',fourcc, 20.0, (640,480))
-
-      while True:
-         ret, jpeg = cv2.imencode('.jpg', camera.get_frame())
-         frame =  jpeg.tobytes()
-         
-         yield (b'--frame\r\n'
-            b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
-
-         cv_frame = camera.get_frame()
-         out.write(cv_frame)
-   
-   else:
+def gen( flag, mode):
+      video = cv2.VideoCapture(0)
 
       Exercise_type = {1: 'pushup', 2: 'barbellCurl', 3: 'squat', 4: 'lunge', 5: 'bridge'}
       Routine_type = {'legs': [3, 1, 4], 'Arms': [1, 3, 2] , 'bridge_test':[5]}
@@ -433,22 +383,42 @@ def gen(camera, flag, mode):
 
       Exercise = Routine_type[Routine]
 
-      fps = round(camera.video.get(cv2.CAP_PROP_FPS))
-      width = int(camera.video.get(cv2.CAP_PROP_FRAME_WIDTH))
-      height = int(camera.video.get(cv2.CAP_PROP_FRAME_HEIGHT))
+      fps = round(video.get(cv2.CAP_PROP_FPS))
+      width = int(video.get(cv2.CAP_PROP_FRAME_WIDTH))
+      height = int(video.get(cv2.CAP_PROP_FRAME_HEIGHT))
       # print(fps, width, height)
       
       detector = ExerciseType(width, height, fps)
       start = time.time()
-      while True:
-         idx = 0
+      idx = 0
+      
+      while idx < 3:
+      #width = int(self.video.get(cv2.CAP_PROP_FRAME_WIDTH))
+      #height = int(self.video.get(cv2.CAP_PROP_FRAME_HEIGHT))
+      
+         success, img = video.read()
+         current = time.time()-start
+         if success:
+            img = hand_video(success, img, detector)
+            lmList = detector.findPosition(img, draw=False)
+            if len(lmList) != 0:
+                count, per ,bar = detector.SelectExerciseMode(img, Exercise_type[Exercise[idx]])
+                if (int(current) == 50) | (count == 10):
+                   idx += 1
+                   start = time.time()
+                cv2.rectangle(img, (0, height - 200), (150, height),
+                  (0, 255, 0), cv2.FILLED)
+                cv2.putText(img, '{:.1f}'.format(current), (15, height-75), cv2.FONT_HERSHEY_PLAIN, 5,
+                  (255, 0, 0), 5)
+                cv2.putText(img, Exercise_type[Exercise[idx]], (15+150, height-50), cv2.FONT_HERSHEY_PLAIN, 5,
+                  (0, 0, 255), 5)
+                detector.Draw(img, per, bar)
 
-         ret, jpeg = cv2.imencode('.jpg', camera.get_frame(detector, start, idx, Exercise_type, Exercise))
+         ret, jpeg = cv2.imencode(".jpg", img)
          frame =  jpeg.tobytes()
-         
          yield (b'--frame\r\n'
             b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
-         
+
          if cv2.waitKey(1) == 27:
             break
-      
+      video.release()
