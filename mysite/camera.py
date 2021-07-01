@@ -380,7 +380,7 @@ def gen( flag, mode):
       Exercise_type = {1: 'pushup', 2: 'barbellCurl', 3: 'squat', 4: 'lunge', 5: 'bridge'}
       Routine_type = {'Beginner': [3, 1], 'Intermediate': [3,1,4] , 'Premium':[3,1,4,5]}
       Routine = mode
-      goal_list = {'Beginner': [10, 10], 'Intermediate': [20,15,10] , 'Premium':[25,15,10,10]}
+      goal_list = {'Beginner': [10, 15], 'Intermediate': [15,20,10] , 'Premium':[25,15,10,10]}
       Exercise = Routine_type[Routine]
       goal = goal_list[Routine]
       fps = round(video.get(cv2.CAP_PROP_FPS))
