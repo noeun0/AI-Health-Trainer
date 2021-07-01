@@ -1,12 +1,20 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block content %}
+<center>
   <h2 class="card-title">AI Trainer</h2>
+
+  <b>홈트족을 위한 ai 트레이닝 서비스</b><br><br>
+  1. 나의 수준에 맞는 코스를 선택할 수 있습니다.<br>
+  2. 관절의 각도를 계산하여 완성도를 게이지바로 시각화해서 보여줍니다<br>
+  3. 카운트를 대신 해주어 오직 운동에만 집중할 수 있게 해줍니다!<br><br><br><br>
+
+
   <p class="card-text">
-     홈페이지
-  </p>
-  <p class="card-text">
-    
-    <br>
-  </p>
+    조원 김대민, 김정헌, 노은영, 문태민, 이서우
+ </p>
+
+  <img src="{% static '고급.png' %}"  class="card-img-top" alt="...">
+
+</center>
 {% endblock %}
